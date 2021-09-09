@@ -20,8 +20,13 @@ function _encrypt([string] $plainText, [string] $key) {
 }
 
 function _decrypt([string] $encryptedText, [string] $key) {
-    $cred = [pscredential]::new("x", ($encryptedText | ConvertTo-SecureString -Key (_getBytes $key)))
-    return $cred.GetNetworkCredential().Password
+    try {
+        $cred = [pscredential]::new("x", ($encryptedText | ConvertTo-SecureString -Key (_getBytes $key) -ErrorAction SilentlyContinue))
+        return $cred.GetNetworkCredential().Password   
+    }
+    catch {
+        Write-Warning "Cannot get the value as plain text; Use the right key to get the secret value as plain text."
+    }
 }
 
 function _createDb {
@@ -48,6 +53,15 @@ function _getDbPath {
 function _getKeyFile {
     $path = Split-Path -Path (_getDbPath) -Parent
     return "$path\private.key"
+}
+
+function _archiveKeyFile {
+    $path = (Split-Path -Path (_getKeyFile) -Parent)
+    $file = (_getKeyFile).Replace("private", "private_$(Get-Date -Format ddMMyyyy-HH_mm_ss)")
+    if (!(Test-Path "$path\archive")) { $null = New-Item -Path "$path\archive" -ItemType Directory }
+    _unhideFile (_getKeyFile)
+    Rename-Item -Path (_getKeyFile) -NewName $file
+    Move-Item -Path $file -Destination "$path\archive\" -Force
 }
 
 function _isKeyFileExists {
