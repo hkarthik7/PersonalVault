@@ -15,4 +15,4 @@ if (!(Test-Path "$($PWD.Path)\Tests\results")) {
     $null = New-Item -Path "$($PWD.Path)\Tests" -ItemType Directory -Name "results"
 }
 
-Invoke-psake .\build.ps1 Clean, Build, UpdateManifest, Analyze, Test
+Invoke-psake .\build.ps1 Clean, Build, UpdateManifest, Analyze, Test -nologo
