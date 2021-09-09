@@ -3,8 +3,11 @@ function Get-PSSecret {
     [CmdletBinding()]
     param (
         [Parameter(ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true)]
+        [ArgumentCompleter([NameCompleter])]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
+
+        [string] $Key = (Get-PSKey),
 
         [switch] $AsPlainText
     )
@@ -25,7 +28,7 @@ function Get-PSSecret {
         if ($AsPlainText.IsPresent -and ($PSBoundParameters.ContainsKey('Name'))) {
             $res = $res | Where-Object { $_.Name -eq $Name } | Select-Object -ExpandProperty Value   
             if (!$res) { Write-Warning "Couldn't find the value for given Name '$Name'; Pass the correct value and try again." }
-            else { return _decrypt -encryptedText $res -key (Get-PSKey) }
+            else { return _decrypt -encryptedText $res -key $Key }
         }
 
         if ($AsPlainText.IsPresent -and !($PSBoundParameters.ContainsKey('Name'))) {
@@ -33,11 +36,13 @@ function Get-PSSecret {
             $res | ForEach-Object {
                 $r = [PSCustomObject]@{
                     Name = $_.Name
-                    Value = (_decrypt -encryptedText $_.Value -key (Get-PSKey))
+                    Value = (_decrypt -encryptedText $_.Value -key $Key)
                 }
                 $result += $r
             }
-            return $result
+            if (!([string]::IsNullOrEmpty($result.Value))) { return $result }
         }
+
+        else { return $res }
     }
 }
