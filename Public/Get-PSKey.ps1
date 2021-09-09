@@ -17,7 +17,10 @@ function Get-PSKey {
             _saveKey -key $key
         }
 
-        if ($Force.IsPresent) { $key = _generateKey; _saveKey -key $key -force }
+        if ($Force.IsPresent) {
+            _archiveKeyFile
+            $key = _generateKey; _saveKey -key $key -force
+        }
 
         return $key
     }
