@@ -26,6 +26,7 @@ Task Build {
     . .\Merge-Files.ps1
 
     # move all the functions to module file.
+    Merge-Files -InputDirectory .\Classes -OutputDirectory .\PersonalVault\PersonalVault.classes.ps1 -Classes
     Merge-Files -InputDirectory .\Private\, .\Public\ -OutputDirectory .\PersonalVault\PersonalVault.functions.ps1 -Functions
     Copy-Item -Path ("$($PWD.Path)\PersonalVault.psm1", "$($PWD.Path)\PersonalVault.psd1") -Destination "$($PWD.Path)\PersonalVault\"
 }
