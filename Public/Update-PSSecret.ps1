@@ -6,6 +6,7 @@ function Update-PSSecret {
             Position = 0,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
+        [ArgumentCompleter([NameCompleter])]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
