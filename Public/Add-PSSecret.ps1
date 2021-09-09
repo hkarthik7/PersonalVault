@@ -21,6 +21,7 @@ function Add-PSSecret {
     )
     
     process {
+        _isHacked $Value
 
         if (_isNameExists $Name) { Write-Warning "Given name '$Name' already exists; Pass different name and try again." }
 

@@ -99,3 +99,73 @@ function _unhideFile([string] $filePath) {
 function _isNameExists([string] $name) {
     return [bool] (Get-PSSecret -Name $name -WarningAction 'SilentlyContinue')
 }
+
+function _getHackedPasswords {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory = $true, ValueFromPipeline=$true)]        
+        [String[]]$secureStringList
+    )
+    
+    begin {
+        #initialize function variables
+        $encoding = [System.Text.Encoding]::UTF8
+        $result = @()
+        $hackedCount = @()
+    }
+    
+    process {
+        foreach ($string in $secureStringList) {
+            
+            $SHA1Hash = New-Object -TypeName "System.Security.Cryptography.SHA1CryptoServiceProvider"
+            $Hashcode = ($SHA1Hash.ComputeHash($encoding.GetBytes($string)) | `
+                    ForEach-Object { "{0:X2}" -f $_ }) -join ""
+            
+            $Start, $Tail = $Hashcode.Substring(0, 5), $Hashcode.Substring(5)
+
+            $Url = "https://api.pwnedpasswords.com/range/" + $Start
+            $Request = Invoke-RestMethod -Uri $Url -UseBasicParsing -Method Get
+            
+            $hashedArray = $Request.Split()
+
+            foreach ($item in $hashedArray) {
+
+                if (!([string]::IsNullOrEmpty($item))) {
+                    $encodedPassword = $item.Split(":")[0]
+                    $count = $item.Split(":")[1]
+                    $Hash = [PSCustomObject]@{
+                        "HackedPassword" = $encodedPassword.Trim()
+                        "Count"          = $count.Trim()
+                    }
+                    $result += $Hash
+                }  
+            }
+
+            foreach ($pass in $result) {
+                if($pass.HackedPassword -eq $Tail) {
+                    $newHash = [PSCustomObject]@{
+                        Name = $string
+                        Count = $pass.Count
+                    }
+                    $hackedCount += $newHash
+                }
+            }
+
+            if ($string -notin $hackedCount.Name) {
+                $finalHash = [PSCustomObject]@{
+                    Name = $string
+                    Count = 0
+                }
+                $hackedCount += $finalHash
+            }
+        }
+        return $hackedCount
+    }
+}
+
+function _isHacked([string] $value) {
+    $res = (_getHackedPasswords $value).Count
+    if ($res -gt 0) {
+        Write-Warning "Secret '$value' is hacked $($res) time(s); Consider changing the secret value."
+    }
+}
