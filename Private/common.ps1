@@ -166,6 +166,6 @@ function _getHackedPasswords {
 function _isHacked([string] $value) {
     $res = (_getHackedPasswords $value).Count
     if ($res -gt 0) {
-        Write-Warning "Secret '$value' is hacked $($res) time(s); Consider changing the secret value."
+        Write-Warning "Secret '$value' was hacked $($res) time(s); Consider changing the secret value."
     }
 }
