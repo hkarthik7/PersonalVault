@@ -24,6 +24,8 @@ function Update-PSSecret {
     )
     
     process {
+        _isHacked $Value
+        
         if (!(_isNameExists $Name)) { Write-Warning "Couldn't find the value for given Name '$Name'; Pass the correct value and try again." }
 
         else {
