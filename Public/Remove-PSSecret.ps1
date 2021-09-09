@@ -6,6 +6,7 @@ function Remove-PSSecret {
             Position = 0,
             ValueFromPipeline = $true,
             ValueFromPipelineByPropertyName = $true)]
+        [ArgumentCompleter([NameCompleter])]
         [ValidateNotNullOrEmpty()]
         [string] $Name,
 
@@ -16,7 +17,7 @@ function Remove-PSSecret {
         if (!(_isNameExists $Name)) { Write-Warning "Couldn't find the value for given Name '$Name'; Pass the correct value and try again." }
 
         else {
-            if ($Force -or $PSCmdlet.ShouldProcess($Value, "Remove-Secret")) {
+            if ($Force -or $PSCmdlet.ShouldProcess($Name, "Remove-Secret")) {
 
                 Invoke-SqliteQuery -DataSource (_getDbPath) -Query "DELETE FROM _ WHERE Name = '$Name'"                
             }
