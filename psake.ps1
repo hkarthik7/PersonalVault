@@ -1,5 +1,5 @@
 # Install dependencies
-$RequiredModules = @("psake", "Pester", "BuildHelpers", "PSScriptAnalyzer", "platyPS")
+$RequiredModules = @("psake", "Pester", "BuildHelpers", "PSScriptAnalyzer", "platyPS", "PSSQlite")
 $RequiredModules | ForEach-Object {
     if (-not (Get-Module -ListAvailable $_)) {
         Write-Output "Installing module $($_)"
