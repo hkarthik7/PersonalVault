@@ -6,7 +6,7 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 ## Getting Started
 
-Install the module from the [PowerShellGallery](https://www.powershellgallery.com/)
+Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/0.1.0)
 
 ## Examples
 ### Example 1
