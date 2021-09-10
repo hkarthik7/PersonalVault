@@ -8,6 +8,25 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 Install the module from the [PowerShellGallery](https://www.powershellgallery.com/)
 
+## Examples
+### Example 1
+```powershell
+# Add a new secret value to the store
+PS C:\> Add-PSSecret -Name MyNewSecret -Value "MyNewSecretValue@2021"
+```
+
+### Example 2
+```powershell
+# Read the secret value from the store
+PS C:\> Get-PSSecret -Name MyNewSecret
+```
+
+### Example 3
+```powershell
+# Inspect the module to list the cmdlets and each cmdlet has it's associate help section.
+PS C:\> Get-Command -Module PersonalVault
+```
+
 ## Release Notes
 
 - [ChangeLog](https://github.com/hkarthik7/PersonalVault/blob/master/CHANGELOG.md)
