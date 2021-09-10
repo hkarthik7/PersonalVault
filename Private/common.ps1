@@ -89,11 +89,17 @@ function _saveKey([string] $key, [switch] $force) {
 }
 
 function _hideFile([string] $filePath) {
-    if ((Get-Item $filePath -Force).Attributes -notmatch 'Hidden') { (Get-Item $filePath).Attributes += 'Hidden' }
+    $os = $env:OS
+    if (($os) -and ($os -match "Windows")) {    
+        if ((Get-Item $filePath -Force).Attributes -notmatch 'Hidden') { (Get-Item $filePath).Attributes += 'Hidden' }
+    }
 }
 
 function _unhideFile([string] $filePath) {
-    if ((Get-Item $filePath -Force).Attributes -match 'Hidden') { (Get-Item $filePath -Force).Attributes -= 'Hidden' }
+    $os = $env:OS
+    if (($os) -and ($os -match "Windows")) {
+        if ((Get-Item $filePath -Force).Attributes -match 'Hidden') { (Get-Item $filePath -Force).Attributes -= 'Hidden' }
+    }
 }
 
 function _isNameExists([string] $name) {
