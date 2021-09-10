@@ -29,6 +29,7 @@ Task Build {
     Merge-Files -InputDirectory .\Classes -OutputDirectory .\PersonalVault\PersonalVault.classes.ps1 -Classes
     Merge-Files -InputDirectory .\Private\, .\Public\ -OutputDirectory .\PersonalVault\PersonalVault.functions.ps1 -Functions
     Copy-Item -Path ("$($PWD.Path)\PersonalVault.psm1", "$($PWD.Path)\PersonalVault.psd1") -Destination "$($PWD.Path)\PersonalVault\"
+    Copy-Item -Path "$($PWD.Path)\en-US\" -Destination "$($PWD.Path)\PersonalVault\en-US\" -Recurse
 }
 
 Task UpdateManifest {
