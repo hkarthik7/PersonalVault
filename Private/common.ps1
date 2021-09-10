@@ -169,3 +169,7 @@ function _isHacked([string] $value) {
         Write-Warning "Secret '$value' was hacked $($res) time(s); Consider changing the secret value."
     }
 }
+
+function _clearPersonalVault {
+    Remove-Item -Path (Split-Path -Path (_getDbPath) -Parent) -Recurse -Force
+}
