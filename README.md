@@ -6,11 +6,11 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 ## Getting Started
 
-TODO
+Install the module from the [PowerShellGallery](https://www.powershellgallery.com/)
 
 ## Release Notes
 
-TODO
+- [ChangeLog](https://github.com/hkarthik7/PersonalVault/blob/master/CHANGELOG.md)
 
 ## Dependencies
 
@@ -18,7 +18,7 @@ TODO
 
 ## Build Locally
 
-TODO
+To build the module locally run .\psake.ps1. This installs the dependencies and runs unit tests.
 
 ## License
 
@@ -26,4 +26,4 @@ TODO
 
 ## Contributions
 
-TODO
+Contributions are welcome.
