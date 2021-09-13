@@ -45,7 +45,7 @@ function Update-PSSecret {
                 _hideFile (_getDbPath)
                 
                 # cleaning up
-                _clearHistory $Value
+                _clearHistory $MyInvocation.MyCommand.Name
             }
         }
     }    
