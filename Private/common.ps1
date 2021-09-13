@@ -40,11 +40,11 @@ function _getUser {
     else { return $env:USER }
 }
 
-function _clearHistory([string] $value) {
+function _clearHistory([string] $functionName) {
     $path = (Get-PSReadLineOption).HistorySavePath
     $contents = Get-Content -Path $path
 
-    if ($contents -match $value) { $contents -replace $value, "" | Set-Content -Path $path -Encoding UTF8 }
+    if ($contents -notmatch $functionName) { $contents -notmatch $functionName | Set-Content -Path $path -Encoding UTF8 }
 }
 
 function _createDb {
