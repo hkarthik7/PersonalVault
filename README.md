@@ -19,12 +19,53 @@ PS C:\> Add-PSSecret -Name MyNewSecret -Value "MyNewSecretValue@2021"
 ```powershell
 # Read the secret value from the store
 PS C:\> Get-PSSecret -Name MyNewSecret
+76492d1116743f0423413b16050a5345MgB8AEcAbwBqADgAO....
+
+# list all the available secret values from the vault
+PS C:\> Get-PSSecret
+Name                     Value
+----                     -----
+Test1                    76492d1116743f0423413b16050a5345MgB8AGIAbQBWAFYASgBRAHYAGE... 
+NewTest                  76492d1116743f0423413b16050a5345MgAMQAxADcAOABjADYAMgA1AGU... 
+NNNEw                    76492d1116743f0423413b16050a5345MgB8ADgAVQBLAHMARwBYAEQAWg...
 ```
 
 ### Example 3
 ```powershell
-# Inspect the module to list the cmdlets and each cmdlet has it's associate help section.
-PS C:\> Get-Command -Module PersonalVault
+# Update an existing secret; Tab complete the Name parameter to easily find the Name to update it's corresponding value.
+PS C:\> Update-PSSecret -Name MyNewSecret -Value Thisisanewsecretpassword -Force
+```
+
+### Example 4
+```powershell
+# Remove the secret value from the vault.
+PS C:\> Remove-PSSecret -Name MyNewSecret -Force
+```
+
+### Example 5
+```powershell
+# Get the key that is used to encrypt the password.
+PS C:\> Get-PSKey
+8fhbrfbv8y3rhbqjf98y4ribfkyd5*^g
+```
+
+### Example 6
+```powershell
+# Rotate the key every time when you add a secret value. This way each of your secret value will be encrypted with a new key.
+PS C:\> Get-PSKey -Force
+948ryqibcklajdbalkjbalyq8fqo-(D
+```
+
+### Example 7
+```powershell
+# Get all the keys that was used to encrypt your secret value. You can only decrypt the value using the same key.
+PS C:\> Get-PSArchivedKey
+DateModified        Key
+------------        ---
+04/06/2021 10:34:44 Key1
+04/06/2021 10:37:06 Key2
+10/07/2021 10:39:27 Key3
+10/09/2021 10:39:29 Key4
 ```
 
 ## Release Notes
