@@ -29,8 +29,26 @@ function _decrypt([string] $encryptedText, [string] $key) {
     }
 }
 
+function _getOS {
+    if ($env:OS -match 'Windows') { return 'Windows' }
+    elseif ($IsLinux) { return 'Linux' }
+    elseif ($IsMacOs -or $IsOSX) { return 'MacOs' }
+}
+
+function _getUser {
+    if ((_getOS) -eq 'Windows') { return $env:USERNAME }
+    else { return $env:USER }
+}
+
+function _clearHistory([string] $value) {
+    $path = (Get-PSReadLineOption).HistorySavePath
+    $contents = Get-Content -Path $path
+
+    if ($contents -match $value) { $contents -replace $value, "" | Set-Content -Path $path -Encoding UTF8 }
+}
+
 function _createDb {
-    $path = "$env:USERPROFILE\.cos_$($env:USERNAME.ToLower())"
+    $path = "$($Home)\.cos_$((_getUser).ToLower())"
     $pathExists = Test-Path $path
     $file = "$path\_.db"
     $query = "CREATE TABLE _ (Name NVARCHAR PRIMARY KEY, Value TEXT)"
@@ -89,15 +107,13 @@ function _saveKey([string] $key, [switch] $force) {
 }
 
 function _hideFile([string] $filePath) {
-    $os = $env:OS
-    if (($os) -and ($os -match "Windows")) {    
+    if ((_getOS) -eq "Windows") {    
         if ((Get-Item $filePath -Force).Attributes -notmatch 'Hidden') { (Get-Item $filePath).Attributes += 'Hidden' }
     }
 }
 
 function _unhideFile([string] $filePath) {
-    $os = $env:OS
-    if (($os) -and ($os -match "Windows")) {
+    if ((_getOS) -eq "Windows") {
         if ((Get-Item $filePath -Force).Attributes -match 'Hidden') { (Get-Item $filePath -Force).Attributes -= 'Hidden' }
     }
 }
@@ -170,7 +186,7 @@ function _getHackedPasswords {
 }
 
 function _isHacked([string] $value) {
-    $res = (_getHackedPasswords $value).Count
+    $res = (_getHackedPasswords $value -ErrorAction SilentlyContinue).Count
     if ($res -gt 0) {
         Write-Warning "Secret '$value' was hacked $($res) time(s); Consider changing the secret value."
     }
