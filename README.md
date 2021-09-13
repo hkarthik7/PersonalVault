@@ -8,6 +8,11 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/0.1.0)
 
+```powershell
+# For PowerShell version 5 and above run.
+PS C:\> Install-Module PersonalVault -Force
+```
+
 ## Examples
 ### Example 1
 ```powershell
@@ -74,7 +79,7 @@ DateModified        Key
 
 ## Dependencies
 
-- PSSQlite
+- [PSSQlite](https://www.powershellgallery.com/packages/PSSQLite/1.1.0)
 
 ## Build Locally
 
