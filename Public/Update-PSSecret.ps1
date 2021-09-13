@@ -42,7 +42,10 @@ function Update-PSSecret {
                     -DataSource (_getDbPath) `
                     -Query "UPDATE _ SET Value = '$encryptedValue' WHERE Name = '$Name'"
     
-                _hideFile (_getDbPath)                
+                _hideFile (_getDbPath)
+                
+                # cleaning up
+                _clearHistory $Value
             }
         }
     }    

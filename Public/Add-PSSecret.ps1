@@ -46,6 +46,9 @@ function Add-PSSecret {
                 }
             
             _hideFile (_getDbPath)
+
+            # cleaning up
+            _clearHistory $Value
         }
     }
 }
