@@ -12,7 +12,7 @@ Describe "PersonalVault" {
         }
 
         It "Should add a secret to personal vault" {
-            Add-PSSecret -Name "Test" -Value "Test"
+            Add-PSSecret -Name "Test" -Value "Test" -Metadata "Secret value of Test"
             Get-PSSecret -Name "Test" -AsPlainText | Should -BeLikeExactly "Test"
         }
 

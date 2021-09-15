@@ -7,7 +7,7 @@ Describe "PersonalVault" {
     Context "Remove-PSSecret" {
         BeforeAll {
             if (!([bool] (Get-PSSecret -Name "Test" -WarningAction SilentlyContinue))) {
-                Add-PSSecret -Name "Test" -Value "Test"
+                Add-PSSecret -Name "Test" -Value "Test" -Metadata "Secret value of Test"
             }
         }
 
