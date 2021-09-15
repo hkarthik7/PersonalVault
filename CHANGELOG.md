@@ -1,4 +1,9 @@
-0.1.1
+# 0.1.2
+
+- Fixed **Get-PSKey** key rotation.
+- Added Metadata section to update the comments. This helps to know what we're storing.
+
+# 0.1.1
 
 - Bug fix for username and user home drive environment variables.
 - Modified the functionality to hide files only in Windows.
