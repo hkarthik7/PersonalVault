@@ -9,7 +9,7 @@ function Update-Help {
         $Directory = ".\docs",
 
         [string]
-        $OutputDirectory = (".\$(Get-ProjectName)\en-US"),
+        $OutputDirectory = (".\en-US"),
 
         [switch]
         $CreateMarkDown,
