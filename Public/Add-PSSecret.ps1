@@ -16,6 +16,14 @@ function Add-PSSecret {
         [ValidateNotNullOrEmpty()]
         [string] $Value,
 
+        [Parameter(
+            Mandatory = $true,
+            Position = 2,
+            HelpMessage = "Provide the details of what you are storing",
+            ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [string] $Metadata,
+
         [ValidateNotNullOrEmpty()]
         [string] $Key
     )
@@ -39,10 +47,11 @@ function Add-PSSecret {
     
             Invoke-SqliteQuery `
                 -DataSource (_getDbPath) `
-                -Query "INSERT INTO _ (Name, Value) VALUES (@N, @V)" `
+                -Query "INSERT INTO _ (Name, Value, Metadata) VALUES (@N, @V, @M)" `
                 -SqlParameters @{
                     N = $Name
                     V = $encryptedValue
+                    M = $Metadata
                 }
             
             _hideFile (_getDbPath)

@@ -37,6 +37,7 @@ function Get-PSSecret {
                 $r = [PSCustomObject]@{
                     Name = $_.Name
                     Value = (_decrypt -encryptedText $_.Value -key $Key)
+                    Metadata = $_.Metadata
                 }
                 $result += $r
             }
