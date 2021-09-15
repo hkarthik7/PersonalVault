@@ -36,8 +36,8 @@ function _getOS {
 }
 
 function _getUser {
-    if ((_getOS) -eq 'Windows') { return $env:USERNAME }
-    else { return $env:USER }
+    # should work in both Mac and Linux
+    return [System.Environment]::UserName
 }
 
 function _clearHistory([string] $functionName) {
@@ -48,10 +48,12 @@ function _clearHistory([string] $functionName) {
 }
 
 function _createDb {
-    $path = "$($Home)\.cos_$((_getUser).ToLower())"
+    $path = Join-Path -Path $Home -ChildPath ".cos_$((_getUser).ToLower())"
     $pathExists = Test-Path $path
-    $file = "$path\_.db"
-    $query = "CREATE TABLE _ (Name NVARCHAR PRIMARY KEY, Value TEXT)"
+    $file = Join-Path -Path $path -ChildPath "_.db"
+
+    # Metadata section is required so that we know what we are storing.
+    $query = "CREATE TABLE _ (Name NVARCHAR PRIMARY KEY, Value TEXT, Metadata TEXT)"
     $fileExists = Test-Path $file
 
     if (!$pathExists) { $null = New-Item -Path $path -ItemType Directory }
@@ -70,16 +72,18 @@ function _getDbPath {
 
 function _getKeyFile {
     $path = Split-Path -Path (_getDbPath) -Parent
-    return "$path\private.key"
+    return (Join-Path -Path $path -ChildPath "private.key")
 }
 
 function _archiveKeyFile {
-    $path = (Split-Path -Path (_getKeyFile) -Parent)
-    $file = (_getKeyFile).Replace("private", "private_$(Get-Date -Format ddMMyyyy-HH_mm_ss)")
-    if (!(Test-Path "$path\archive")) { $null = New-Item -Path "$path\archive" -ItemType Directory }
+    $path = Split-Path -Path (_getKeyFile) -Parent
+    [string] $keyFile = _getKeyFile
+    $file = $keyFile.Replace("private", "private_$(Get-Date -Format ddMMyyyy-HH_mm_ss)")
+    $archivePath = Join-Path -Path $path -ChildPath "archive"
+    if (!(Test-Path $archivePath)) { $null = New-Item -Path $archivePath -ItemType Directory }
     _unhideFile (_getKeyFile)
     Rename-Item -Path (_getKeyFile) -NewName $file
-    Move-Item -Path $file -Destination "$path\archive\" -Force
+    Move-Item -Path $file -Destination "$archivePath" -Force
 }
 
 function _isKeyFileExists {
