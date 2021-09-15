@@ -13,7 +13,7 @@ Adds a secret to the personal vault store.
 ## SYNTAX
 
 ```
-Add-PSSecret [-Name] <String> [-Value] <String> [-Key <String>] [<CommonParameters>]
+Add-PSSecret [-Name] <String> [-Value] <String> -Metadata <String> [-Key <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,14 +23,14 @@ This cmdlet adds the given name and secret value to the personal vault. It auto 
 
 ### Example 1
 ```powershell
-PS C:\> Add-PSSecret -Name "MynewSecret" -Value "Thisisanonhackablepassword@2021"
+PS C:\> Add-PSSecret -Name "GMail_username" -Value "Thisisanonhackablepassword@2021" -Metadata "My personal gmail account."
 ```
 
 Add a secret value to the vault.
 
 ### Example 2
 ```powershell
-PS C:\> Add-PSSecret -Name "Test" -Value "Test@123"
+PS C:\> Add-PSSecret -Name Test -Value 'Test@123' -Metadata "Adding a test value"
 WARNING: Secret 'Test@123' was hacked 833 time(s); Consider changing the secret value.
 ```
 
@@ -83,6 +83,21 @@ Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
+### -Metadata
+Provide the details of what you are storing
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -96,4 +111,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
 [Add-PSSecret](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Add-PSSecret.md)

@@ -13,7 +13,7 @@ Get the key and secret in a key value pair.
 ## SYNTAX
 
 ```
-Get-PSSecret [[-Name] <String>] [[-Key] <String>] [-AsPlainText] [<CommonParameters>]
+Get-PSSecret [-Name <String>] [[-Key] <String>] [-AsPlainText] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -80,8 +80,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Names
-Pass the key name of the secret value. 
+### -Name
+Provide the name to get it's associated secret value.
 
 ```yaml
 Type: String
@@ -89,7 +89,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 0
+Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
@@ -108,4 +108,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## NOTES
 
 ## RELATED LINKS
+
 [Get-PSSecret](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md)

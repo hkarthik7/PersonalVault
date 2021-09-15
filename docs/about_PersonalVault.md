@@ -18,14 +18,14 @@ Additionally, you can tab complete the available keys from the vault for easy re
 
 ### Example 1
 ```powershell
-PS C:\> Add-PSSecret -Name "MynewSecret" -Value "Thisisanonhackablepassword@2021"
+PS C:\> Add-PSSecret -Name "GMail_username" -Value "Thisisanonhackablepassword@2021" -Metadata "My personal gmail account."
 ```
 
 Add a secret value to the vault.
 
 ### Example 2
 ```powershell
-PS C:\> Add-PSSecret -Name Test -Value 'Test@123'
+PS C:\> Add-PSSecret -Name Test -Value 'Test@123' -Metadata "Adding a test value"
 WARNING: Secret 'Test@123' was hacked 833 time(s); Consider changing the secret value.
 ```
 
@@ -48,7 +48,7 @@ Get the key used to encrypt the secet value
 ### Example 5
 ```powershell
 PS C:\> Get-PSKey -Force
-PS C:\> Add-PSSecret -Name "MyanothernewSecret" -Value "Thisisanonhackablepassword@2021"
+PS C:\> Add-PSSecret -Name "GMail_Username" -Value "Thisisanonhackablepassword@2021" -Metadata "My official gmail account."
 ```
 
 Rotate the key and add a new secret
