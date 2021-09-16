@@ -6,7 +6,7 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 ## Getting Started
 
-Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/0.1.0)
+Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/0.1.2)
 
 ```powershell
 # For PowerShell version 5 and above run.
@@ -17,7 +17,7 @@ PS C:\> Install-Module PersonalVault -Force
 ### Example 1
 ```powershell
 # Add a new secret value to the store
-PS C:\> Add-PSSecret -Name MyNewSecret -Value "MyNewSecretValue@2021"
+PS C:\> Add-PSSecret -Name "GMail_username" -Value "Thisisanonhackablepassword@2021" -Metadata "My personal gmail account."
 ```
 
 ### Example 2
