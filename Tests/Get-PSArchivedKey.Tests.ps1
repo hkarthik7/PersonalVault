@@ -6,13 +6,33 @@ Describe "PersonalVault" {
 
     Context "Get-PSArchivedKey" {
         BeforeAll {
+            $path = Join-Path -Path $Home -ChildPath ".cos_$([System.Environment]::UserName.ToLower())"
+
+            if (Test-Path $path) {
+                Rename-Item -Path $path -NewName ".cos_$([System.Environment]::UserName.ToLower())_backup" -Force
+            }
+
+            $file = Get-ChildItem -Path $PWD.Path -Filter "_settings.json" -Recurse
+            $settings = Get-Content -Path $file.FullName -Raw | ConvertFrom-Json
+            $cred = [pscredential]::new($settings.userName, ($settings.password | ConvertTo-SecureString -AsPlainText -Force))
+            Register-PSPersonalVault -Credential $cred -RecoveryWord ($settings.recoveryWord  | ConvertTo-SecureString -AsPlainText -Force)
+            $null = Connect-PSPersonalVault -Credential ([pscredential]::new($cred.UserName, $cred.Password))
+
             $result = [PSCustomObject]@{
                 DateModified = "09/09/2021 23:11:00"
-                Key = "75uhkjrbsfdv8lfnvkjp98yqrigbwrg8"
+                Key          = "75uhkjrbsfdv8lfnvkjp98yqrigbwrg8"
             }
         }
         It "Should return a the archived keys" {
             Mock Get-PSArchivedKey { return $result }
+        }
+        AfterAll {
+            # cleaning up
+            Remove-PSPersonalVault -Force
+            $path = Join-Path -Path $Home -ChildPath ".cos_$([System.Environment]::UserName)_backup"
+            if (Test-Path $path) {
+                Rename-Item -Path $path -NewName ".cos_$([System.Environment]::UserName.ToLower())" -Force
+            }
         }
     }
 }
