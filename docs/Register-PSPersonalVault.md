@@ -1,7 +1,7 @@
 ---
 external help file: PersonalVault-help.xml
 Module Name: PersonalVault
-online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md
+online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Register-PSPersonalVault.md
 schema: 2.0.0
 ---
 

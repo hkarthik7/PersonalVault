@@ -1,7 +1,7 @@
 ---
 external help file: PersonalVault-help.xml
 Module Name: PersonalVault
-online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVault.md
+online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVaultConnection.md
 schema: 2.0.0
 ---
 
