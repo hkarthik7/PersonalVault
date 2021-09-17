@@ -11,11 +11,20 @@ Install the module from the [PowerShellGallery](https://www.powershellgallery.co
 ```powershell
 # For PowerShell version 5 and above run.
 PS C:\> Install-Module PersonalVault -Force
+PS C:\> Import-Module PersonalVault -Force
 ```
 
 ## Examples
 ### Example 1
 ```powershell
+# You should register first to work with the vault
+# You should remember your recovery word to recover your registered username and password
+PS C:\> $recoveryWord = Read-Host -AsSecureString
+PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $recoveryWord
+
+# connect to the vault with the credential
+PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
+
 # Add a new secret value to the store
 PS C:\> Add-PSSecret -Name "GMail_username" -Value "Thisisanonhackablepassword@2021" -Metadata "My personal gmail account."
 ```
