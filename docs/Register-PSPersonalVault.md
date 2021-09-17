@@ -1,24 +1,24 @@
 ---
 external help file: PersonalVault-help.xml
 Module Name: PersonalVault
-online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVault.md
+online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md
 schema: 2.0.0
 ---
 
-# Remove-PSPersonalVault
+# Register-PSPersonalVault
 
 ## SYNOPSIS
-Removes the personal vault.
+Registers credential to access the vault.
 
 ## SYNTAX
 
 ```
-Remove-PSPersonalVault [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Register-PSPersonalVault [-Credential] <PSCredential> [-RecoveryWord] <SecureString> [-Force]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Permanently removes the personal vault.
-This is a destructive operation and if used all the stored secrets will be lost.
+Registers credential to access the vault.
 
 ## EXAMPLES
 
@@ -28,34 +28,29 @@ This is a destructive operation and if used all the stored secrets will be lost.
 # You should remember your recovery word to recover your registered username and password
 PS C:\> $recoveryWord = Read-Host -AsSecureString
 PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $recoveryWord
-
-# connect to the vault with the credential
-PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
-
-PS C:\> Remove-PSPersonalVault -Force
 ```
 
-Permanently removes the personal vault.
+Registers the credential to access the vault.
 
 ## PARAMETERS
 
-### -Confirm
-Prompts you for confirmation before running the cmdlet.
+### -Credential
+Pass the user name and password and register to access the vault.
 
 ```yaml
-Type: SwitchParameter
+Type: PSCredential
 Parameter Sets: (All)
-Aliases: cf
+Aliases:
 
-Required: False
-Position: Named
-Default value: False
-Accept pipeline input: False
+Required: True
+Position: 0
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 
 ### -Force
-Permanently removes the vault if true.
+If true overwrites the existing stored credential
 
 ```yaml
 Type: SwitchParameter
@@ -64,23 +59,22 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -WhatIf
-Shows what would happen if the cmdlet runs.
-The cmdlet is not run.
+### -RecoveryWord
+Recovery word to recover the username and password incase if you forget.
 
 ```yaml
-Type: SwitchParameter
+Type: SecureString
 Parameter Sets: (All)
-Aliases: wi
+Aliases:
 
-Required: False
-Position: Named
-Default value: False
+Required: True
+Position: 1
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -90,7 +84,8 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
-### None
+### System.Management.Automation.PSCredential
+
 ## OUTPUTS
 
 ### System.Object
@@ -99,5 +94,4 @@ The secret values that you are entering as plain text in the session will not st
 
 ## RELATED LINKS
 
-[Remove-PSPersonalVault](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVault.md)
-
+[Register-PSPersonalVault](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Register-PSPersonalVault.md)

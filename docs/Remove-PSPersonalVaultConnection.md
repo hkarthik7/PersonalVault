@@ -5,20 +5,19 @@ online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remo
 schema: 2.0.0
 ---
 
-# Remove-PSPersonalVault
+# Remove-PSPersonalVaultConnection
 
 ## SYNOPSIS
-Removes the personal vault.
+Removes the existing connection and stored connection to the vault.
 
 ## SYNTAX
 
 ```
-Remove-PSPersonalVault [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+Remove-PSPersonalVaultConnection [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Permanently removes the personal vault.
-This is a destructive operation and if used all the stored secrets will be lost.
+Removes the existing connection and stored connection to the vault.
 
 ## EXAMPLES
 
@@ -32,10 +31,10 @@ PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $rec
 # connect to the vault with the credential
 PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
 
-PS C:\> Remove-PSPersonalVault -Force
+PS C:\> Remove-PSPersonalVaultConnection -Force
 ```
 
-Permanently removes the personal vault.
+You must create a connection to the vault before removing the connection. If you remove the connection you have to register before connecting.
 
 ## PARAMETERS
 
@@ -49,13 +48,13 @@ Aliases: cf
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -Force
-Permanently removes the vault if true.
+If true removes the store credential used for connecting the vault.
 
 ```yaml
 Type: SwitchParameter
@@ -64,7 +63,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -80,7 +79,7 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: False
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -91,6 +90,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### None
+
 ## OUTPUTS
 
 ### System.Object
@@ -99,5 +99,4 @@ The secret values that you are entering as plain text in the session will not st
 
 ## RELATED LINKS
 
-[Remove-PSPersonalVault](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVault.md)
-
+[Remove-PSPersonalVaultConnection](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSPersonalVaultConnection.md)

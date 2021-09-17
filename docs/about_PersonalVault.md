@@ -14,10 +14,20 @@ Additionally, you can tab complete the available keys from the vault for easy re
 
 **PersonalVault** gives a warning if the secret value that you're trying to store is already exposed (or hacked) in the internet. This gives us an opportunity to review the secret value and change it immediately.
 
+Your secret values are protected with a username and password and you should use it every time when you try to access your vault from a new console window.
+
 # EXAMPLES
 
 ### Example 1
 ```powershell
+# You should register first to work with the vault
+# You should remember your recovery word to recover your registered username and password
+PS C:\> $recoveryWord = Read-Host -AsSecureString
+PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $recoveryWord
+
+# connect to the vault with the credential
+PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
+
 PS C:\> Add-PSSecret -Name "GMail_username" -Value "Thisisanonhackablepassword@2021" -Metadata "My personal gmail account."
 ```
 
@@ -84,6 +94,7 @@ Force remove the vault. This is a destructive operation and it removes all the s
 # NOTE
 It is best to save the secrets with individual keys for more security. Since the PowerShell encryption uses Windows DPAPI, the user who stored the keys and secrets
 can only view it in plain text.
+The secret values that you are entering as plain text in the session will not stick to in the history. **PersonalVault** will automatically remove the module related cmdlets from the history. Re-open the console to make sure that all the secrets are removed from the history.
 
 # SEE ALSO
 [Get-PSSecret](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md)

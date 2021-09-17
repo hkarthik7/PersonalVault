@@ -1,7 +1,7 @@
 ---
 external help file: PersonalVault-help.xml
 Module Name: PersonalVault
-online version:
+online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSSecret.md
 schema: 2.0.0
 ---
 
@@ -23,6 +23,14 @@ Removes a secret value associated with the given key name.
 
 ### Example 1
 ```powershell
+# You should register first to work with the vault
+# You should remember your recovery word to recover your registered username and password
+PS C:\> $recoveryWord = Read-Host -AsSecureString
+PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $recoveryWord
+
+# connect to the vault with the credential
+PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
+
 PS C:\> Remove-PSSecret -Name Test -Force
 ```
 
@@ -40,7 +48,7 @@ Aliases: cf
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -55,7 +63,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -86,7 +94,7 @@ Aliases: wi
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -97,12 +105,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
-
 ## OUTPUTS
 
 ### System.Object
 ## NOTES
+The secret values that you are entering as plain text in the session will not stick to in the history. **PersonalVault** will automatically remove the module related cmdlets from the history. Re-open the console to make sure that all the secrets are removed from the history.
 
 ## RELATED LINKS
 
 [Remove-PSSecret](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Remove-PSSecret.md)
+

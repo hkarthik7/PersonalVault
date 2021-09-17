@@ -1,7 +1,7 @@
 ---
 external help file: PersonalVault-help.xml
 Module Name: PersonalVault
-online version:
+online version: https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md
 schema: 2.0.0
 ---
 
@@ -17,12 +17,22 @@ Get-PSSecret [-Name <String>] [[-Key] <String>] [-AsPlainText] [<CommonParameter
 ```
 
 ## DESCRIPTION
-Get the key and encrypted secret in a key value pair. Tab complete the *Name* and retrieve the secret associated with it. To get the secret as plain text enable the switch AsPlaintext.
+Get the key and encrypted secret in a key value pair.
+Tab complete the Name and retrieve the secret associated with it.
+To get the secret as plain text enable the switch AsPlaintext.
 
 ## EXAMPLES
 
 ### Example 1
 ```powershell
+# You should register first to work with the vault
+# You should remember your recovery word to recover your registered username and password
+PS C:\> $recoveryWord = Read-Host -AsSecureString
+PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $recoveryWord
+
+# connect to the vault with the credential
+PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
+
 PS C:\> Get-PSSecret
 Name        Value
 ----        -----
@@ -40,7 +50,7 @@ Test@123
 
 Get the secret associated with the key.
 
-### Example 2
+### Example 3
 ```powershell
 PS C:\> Get-PSSecret -Name Test -Key Key1 -AsPlainText
 Test@123
@@ -60,7 +70,7 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,12 +111,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## INPUTS
 
 ### System.String
-
 ## OUTPUTS
 
 ### System.Object
 ## NOTES
+The secret values that you are entering as plain text in the session will not stick to in the history. **PersonalVault** will automatically remove the module related cmdlets from the history. Re-open the console to make sure that all the secrets are removed from the history.
 
 ## RELATED LINKS
 
 [Get-PSSecret](https://github.com/hkarthik7/PersonalVault/blob/master/docs/Get-PSSecret.md)
+
