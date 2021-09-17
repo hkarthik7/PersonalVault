@@ -19,6 +19,10 @@ class NameCompleter : IArgumentCompleter {
             }
         }
 
-        return $results
+        if (_isValidConnection (_getConnectionObject)) {
+            return $results
+        }
+
+        return $null
     }
 }
