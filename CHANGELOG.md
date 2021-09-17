@@ -1,3 +1,14 @@
+# 1.1.2
+
+**Breaking Changes**
+- *Register-PSPersonalVault* register with username and password before accessing the vault
+- *Connect-PSPersonalVault* connect to the vault using registered credential to access the vault
+- *Import-PSPersonalVault* recover the username and password using the recovery word if the stored credential are forgotten
+- *Remove-PSPersonalVaultConnection* remove the stored connection
+- Introduced cmdlets to register and connect to the vault using username and password.
+- Recover the credential using recovery word
+- Modified all cmdlets to check the connection before managing the vault
+
 # 0.1.2
 
 - Fixed **Get-PSKey** key rotation.
