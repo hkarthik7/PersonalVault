@@ -6,7 +6,7 @@ function Remove-PSPersonalVault {
     
     process {
         if (_isValidConnection (_getConnectionObject)) {
-            if ($Force.IsPresent -or $PSCmdlet.ShouldProcess("Peronal Vault", "Remove-PSPersonalVault")) {
+            if ($Force.IsPresent -or $PSCmdlet.ShouldProcess("Personal Vault", "Remove-PSPersonalVault")) {
                 _clearPersonalVault
             }
         } else { _connectionWarning }
