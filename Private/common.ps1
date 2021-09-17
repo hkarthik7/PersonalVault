@@ -209,6 +209,12 @@ function _clearPersonalVault {
     Remove-Item -Path (Split-Path -Path (_getDbPath) -Parent) -Recurse -Force
 }
 
+function _clearConnection {
+    Remove-Item -Path (_getConnectionFile) -Force
+    [System.Environment]::SetEnvironmentVariable("PERSONALVAULT_U", "", [System.EnvironmentVariableTarget]::Process)
+    [System.Environment]::SetEnvironmentVariable("PERSONALVAULT_P", "", [System.EnvironmentVariableTarget]::Process)
+}
+
 function _isValidConnection ([PersonalVault] $connection) {
     $verified = $false
 
