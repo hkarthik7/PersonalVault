@@ -6,22 +6,24 @@ function Get-PSKey {
     )
     
     process {
-        if (_isKeyFileExists) {
-            $res = Import-Clixml (_getKeyFile)
-            $key = [pscredential]::new("key", $res)
-            $key = $key.GetNetworkCredential().Password
-        }
+        if (_isValidConnection (_getConnectionObject)) {
+            if (_isKeyFileExists) {
+                $res = Import-Clixml (_getKeyFile)
+                $key = [pscredential]::new("key", $res)
+                $key = $key.GetNetworkCredential().Password
+            }
 
-        if (!(_isKeyFileExists)) {
-            $key = _generateKey
-            _saveKey -key $key
-        }
+            if (!(_isKeyFileExists)) {
+                $key = _generateKey
+                _saveKey -key $key
+            }
 
-        if ($Force.IsPresent) {
-            _archiveKeyFile
-            $key = _generateKey; _saveKey -key $key -force
-        }
+            if ($Force.IsPresent) {
+                _archiveKeyFile
+                $key = _generateKey; _saveKey -key $key -force
+            }
 
-        return $key
+            return $key
+        } else { _connectionWarning }
     }
 }
