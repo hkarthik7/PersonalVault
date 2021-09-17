@@ -66,6 +66,10 @@ function _createDb {
     return $file
 }
 
+function _connectionWarning {
+    Write-Warning "You must create a connection to the vault to manage the secrets. Check your connection object and pass the right credential."
+}
+
 function _getDbPath {
     return _createDb
 }
@@ -73,6 +77,11 @@ function _getDbPath {
 function _getKeyFile {
     $path = Split-Path -Path (_getDbPath) -Parent
     return (Join-Path -Path $path -ChildPath "private.key")
+}
+
+function _getConnectionFile {
+    $path = Split-Path -Path (_getKeyFile) -Parent
+    return (Join-Path -Path $path -ChildPath "connection.clixml")
 }
 
 function _archiveKeyFile {
@@ -198,4 +207,56 @@ function _isHacked([string] $value) {
 
 function _clearPersonalVault {
     Remove-Item -Path (Split-Path -Path (_getDbPath) -Parent) -Recurse -Force
+}
+
+function _isValidConnection ([PersonalVault] $connection) {
+    $verified = $false
+
+    if (($null -ne $connection.UserName) -and ($null -ne $connection.Password)) {
+        if (Test-Path -Path (_getConnectionFile)) {
+            $properties = Import-Clixml -Path (_getConnectionFile)
+            $prop = [pscredential]::new($properties.UserName, $properties.Password)
+            $propPassword = $prop.GetNetworkCredential().Password
+    
+            $conn = [pscredential]::new($connection.UserName, $connection.Password)
+            $connPassword = $conn.GetNetworkCredential().Password
+    
+            if (($prop.UserName -eq $conn.UserName) -and ($propPassword -eq $connPassword)) { $verified = $true }
+        }
+    }
+
+
+    return $verified
+}
+
+function _setEnvironmentVariable ([string] $key, [string] $value) {
+    if (!([string]::IsNullOrEmpty($key)) -and !([string]::IsNullOrEmpty($value))) {
+        [System.Environment]::SetEnvironmentVariable($key, $value, [System.EnvironmentVariableTarget]::Process)
+    }
+}
+
+function _getEnvironmentVariable([string] $key) {
+    if (!([string]::IsNullOrEmpty($key))) {
+        return [System.Environment]::GetEnvironmentVariable($key)
+    }
+}
+
+function _getConnectionObject {
+    $connection = [PersonalVault]::new()
+    $userName = _getEnvironmentVariable -key "PERSONALVAULT_U"
+    $password = (_getEnvironmentVariable -key "PERSONALVAULT_P")
+
+    if (!([string]::IsNullOrEmpty($userName)) -and !([string]::IsNullOrEmpty($password))) {
+        $connection.UserName = $userName
+        $connection.Password = $password | ConvertTo-SecureString -ErrorAction SilentlyContinue
+        return $connection
+    }
+}
+
+function _isValidRecoveryWord ([securestring] $recoveryWord) {
+    $res = Import-Clixml -Path (_getConnectionFile)
+    $key = [pscredential]::new("Key", $res.Key)
+    $recKey = [pscredential]::new("Key", $recoveryWord)
+
+    return ($recKey.GetNetworkCredential().Password -eq $key.GetNetworkCredential().Password)
 }
