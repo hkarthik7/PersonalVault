@@ -4,6 +4,8 @@ Personal Vault is a **PowerShell** module which helps to save and manage the sec
 
 **PersonalVault** identifies if your secret value is hacked or not when you add it to the store and warns immediately to change the value.
 
+You can view the usage of module in the [blog post](https://hkarthik7.github.io/powershell/2021/10/08/PersonalVault.html).
+
 ## Getting Started
 
 Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/1.1.2)
