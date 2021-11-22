@@ -1,3 +1,6 @@
+# Ins some systems tests won't run if TLS version isn't set.
+[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
+
 # Install dependencies
 $RequiredModules = @("psake", "Pester", "BuildHelpers", "PSScriptAnalyzer", "platyPS", "PSSQlite")
 $RequiredModules | ForEach-Object {
