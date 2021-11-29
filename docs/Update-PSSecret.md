@@ -13,7 +13,7 @@ Updates the secret value for given key and value pair.
 ## SYNTAX
 
 ```
-Update-PSSecret [-Name] <String> [-Value] <String> [-Key <String>] [-Force] [-WhatIf] [-Confirm]
+Update-PSSecret [-Name] <String> [-Value] <String> -Id <Int32> [-Key <String>] [-Force] [-WhatIf] [-Confirm]
  [<CommonParameters>]
 ```
 
@@ -128,6 +128,21 @@ Required: False
 Position: Named
 Default value: False
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+Pass the Id to update it's corresponding value. This helps if there is more than one value with same Name.
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 

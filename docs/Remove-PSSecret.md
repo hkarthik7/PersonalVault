@@ -12,6 +12,17 @@ Removes a secret value associated with the given key name.
 
 ## SYNTAX
 
+### Id (Default)
+```
+Remove-PSSecret -Id <Int32> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Both
+```
+Remove-PSSecret -Id <Int32> [-Name] <String> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
+```
+
+### Name
 ```
 Remove-PSSecret [-Name] <String> [-Force] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
@@ -73,13 +84,13 @@ Provide the name
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Both, Name
 Aliases:
 
 Required: True
 Position: 0
 Default value: None
-Accept pipeline input: True (ByPropertyName, ByValue)
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -96,6 +107,21 @@ Required: False
 Position: Named
 Default value: False
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Id
+Pass the Id to remove it's corresponding value. Note that if more than one secret value has same name then you should pass it's Id to remove it.
+
+```yaml
+Type: Int32
+Parameter Sets: Id, Both
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName, ByValue)
 Accept wildcard characters: False
 ```
 

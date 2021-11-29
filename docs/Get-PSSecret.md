@@ -13,7 +13,7 @@ Get the key and secret in a key value pair.
 ## SYNTAX
 
 ```
-Get-PSSecret [-Name <String>] [[-Key] <String>] [-AsPlainText] [<CommonParameters>]
+Get-PSSecret [-Name <String>] [-Id <Int32>] [[-Key] <String>] [-AsPlainText] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -34,10 +34,12 @@ PS C:\> Register-PSPersonalVault -Credential (Get-Credential) -RecoveryWord $rec
 PS C:\> $connection = Connect-PSPersonalVault -Credential (Get-Credential)
 
 PS C:\> Get-PSSecret
-Name        Value
-----        -----
-Test        76492d1116743f0423413b16050a5345MgB8AHQAMQBCAE0AWQBHAG0AYgAzAGQAdwBMAEwAaAB1...
-MynewSecret 76492d1116743f0423413b16050a5345MgB8AGIAVQBrAG4AUgBYAHIAQQBtAFgANQBIAEcAMwBu...
+Id        : 1
+Name      : Test
+Value     : 76492d1116743f0423413b16050a5345MgB8AEoAVgBpADcAWQBtAHkATAB2ADkATwBKAGUAeAB4AEsAdwBGAEkAZgBLAFEAP...
+Metadata  : Test
+AddedOn   : 11/29/2021 2:55:31 PM
+UpdatedOn :
 ```
 
 Get the available secrets from the store.
@@ -102,6 +104,21 @@ Required: False
 Position: Named
 Default value: None
 Accept pipeline input: True (ByPropertyName, ByValue)
+Accept wildcard characters: False
+```
+
+### -Id
+{{ Fill Id Description }}
+
+```yaml
+Type: Int32
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
