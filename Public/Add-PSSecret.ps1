@@ -25,26 +25,25 @@ function Add-PSSecret {
         if (_isValidConnection (_getConnectionObject)) {
             _isHacked $Value
 
-            if (_isNameExists $Name) { Write-Warning "Given name '$Name' already exists; Pass different name and try again." }
+            $encryptedValue = _encrypt -plainText $Value -key $Key
 
-            else {    
-                $encryptedValue = _encrypt -plainText $Value -key $Key
-    
-                # create the database and save the KV pair
-                $null = _createDb
-    
-                Invoke-SqliteQuery `
-                    -DataSource (_getDbPath) `
-                    -Query "INSERT INTO _ (Name, Value, Metadata) VALUES (@N, @V, @M)" `
-                    -SqlParameters @{
-                    N = $Name
-                    V = $encryptedValue
-                    M = $Metadata
-                }
+            # create the database and save the KV pair
+            $null = _createDb
 
-                # cleaning up
-                _clearHistory $MyInvocation.MyCommand.Name
+            Invoke-SqliteQuery `
+                -DataSource (_getDbPath) `
+                -Query "INSERT INTO _ (Name, Value, Metadata, AddedOn, UpdatedOn) VALUES (@N, @V, @M, @D, @U)" `
+                -SqlParameters @{
+                N = $Name
+                V = $encryptedValue
+                M = $Metadata
+                D = Get-Date
+                U = $null
             }
+
+            # cleaning up
+            _clearHistory $MyInvocation.MyCommand.Name
+            
         } else { _connectionWarning }
     }
 }
