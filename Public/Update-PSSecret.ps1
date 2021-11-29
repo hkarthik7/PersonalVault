@@ -10,6 +10,11 @@ function Update-PSSecret {
         [ValidateNotNullOrEmpty()]
         [string] $Value,
 
+        [Parameter(Mandatory = $true, Position = 2, ValueFromPipelineByPropertyName = $true)]
+        [ValidateNotNullOrEmpty()]
+        [ArgumentCompleter([IdCompleter])]
+        [int] $Id,
+
         [ValidateNotNullOrEmpty()]
         [string] $Key = (Get-PSKey -WarningAction SilentlyContinue),
 
@@ -20,19 +25,15 @@ function Update-PSSecret {
         if (_isValidConnection (_getConnectionObject)) {
             _isHacked $Value
         
-            if (!(_isNameExists $Name)) { Write-Warning "Couldn't find the value for given Name '$Name'; Pass the correct value and try again." }
+            if ($Force -or $PSCmdlet.ShouldProcess($Value, "Update-Secret")) {
+                $encryptedValue = _encrypt -plainText $Value -key $Key
 
-            else {
-                if ($Force -or $PSCmdlet.ShouldProcess($Value, "Update-Secret")) {    
-                    $encryptedValue = _encrypt -plainText $Value -key $Key
-    
-                    Invoke-SqliteQuery `
-                        -DataSource (_getDbPath) `
-                        -Query "UPDATE _ SET Value = '$encryptedValue' WHERE Name = '$Name'"
-                
-                    # cleaning up
-                    _clearHistory $MyInvocation.MyCommand.Name
-                }
+                Invoke-SqliteQuery `
+                    -DataSource (_getDbPath) `
+                    -Query "UPDATE _ SET Value = '$encryptedValue', UpdatedOn = '$(Get-Date)' WHERE Name = '$Name' AND Id = '$Id'"
+            
+                # cleaning up
+                _clearHistory $MyInvocation.MyCommand.Name
             }
         } else { _connectionWarning }
     }    
