@@ -1,4 +1,4 @@
-# Ins some systems tests won't run if TLS version isn't set.
+# Ins some system tests won't run if TLS version isn't set.
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 
 # Install dependencies
@@ -18,4 +18,4 @@ if (!(Test-Path "$($PWD.Path)\Tests\results")) {
     $null = New-Item -Path "$($PWD.Path)\Tests" -ItemType Directory -Name "results"
 }
 
-Invoke-psake .\build.ps1 Clean, Build, UpdateManifest, Analyze, Test -nologo
+Invoke-psake (Join-Path -Path $PWD.Path -ChildPath "build.ps1") Clean, Build, UpdateManifest, Analyze, Test -nologo
