@@ -19,7 +19,15 @@ function _encrypt([string] $plainText, [string] $key) {
     return $plainText | ConvertTo-SecureString -AsPlainText -Force | ConvertFrom-SecureString -Key (_getBytes $key)
 }
 
-function _decrypt([string] $encryptedText, [string] $key) {
+function _decrypt {
+    [CmdletBinding()]
+    param (
+        [Parameter(Mandatory)]
+        [string] $encryptedText,
+
+        [Parameter(Mandatory)]
+        [string] $key
+    )
     try {
         $cred = [pscredential]::new("x", ($encryptedText | ConvertTo-SecureString -Key (_getBytes $key) -ErrorAction SilentlyContinue))
         return $cred.GetNetworkCredential().Password   
@@ -42,25 +50,58 @@ function _getUser {
 
 function _clearHistory([string] $functionName) {
     $path = (Get-PSReadLineOption).HistorySavePath
-    $contents = Get-Content -Path $path
 
-    if ($contents -notmatch $functionName) { $contents -notmatch $functionName | Set-Content -Path $path -Encoding UTF8 }
+    if (!([string]::IsNullOrEmpty($path)) -and (Test-Path -Path $path)) {
+        $contents = Get-Content -Path $path
+        if ($contents -notmatch $functionName) { $contents -notmatch $functionName | Set-Content -Path $path -Encoding UTF8 }
+    }
 }
 
 function _createDb {
     $path = Join-Path -Path $Home -ChildPath ".cos_$((_getUser).ToLower())"
     $pathExists = Test-Path $path
     $file = Join-Path -Path $path -ChildPath "_.db"
-
-    # Metadata section is required so that we know what we are storing.
-    $query = "CREATE TABLE _ (Name NVARCHAR PRIMARY KEY, Value TEXT, Metadata TEXT)"
     $fileExists = Test-Path $file
 
-    if (!$pathExists) { $null = New-Item -Path $path -ItemType Directory }
-    if (!$fileExists) { 
-        $null = New-Item -Path $file -ItemType File 
-        Invoke-SqliteQuery -DataSource $file -Query $query
-        _hideFile $file
+    # Metadata section is required so that we know what we are storing.
+    $query = "CREATE TABLE _ (
+        Id INTEGER PRIMARY KEY AUTOINCREMENT,
+        Name TEXT NOT NULL, 
+        Value TEXT NOT NULL, 
+        Metadata TEXT NOT NULL, 
+        AddedOn TEXT, 
+        UpdatedOn TEXT)"
+
+    # Make ID as primary key and copy all data from old table.
+    # This should run if the file exists with older schema
+    if ($fileExists) {
+        $columns = (Invoke-SqliteQuery -DataSource $file -Query "PRAGMA table_info(_)").name
+        if (!$columns.Contains("AddedOn")) {
+            $res = Invoke-SqliteQuery -DataSource $file -Query "SELECT * FROM _"
+            $null = Remove-Item -Path $file -Force
+            $null = New-Item -Path $file -ItemType File
+            Invoke-SqliteQuery -DataSource $file -Query $query
+
+            foreach ($i in $res) {
+                $dataTable = [PSCustomObject]@{
+                    Name = $i.Name
+                    Value = $i.Value
+                    Metadata = $i.Metadata
+                    AddedOn = $null
+                    UpdatedOn = $null
+                } | Out-DataTable
+            }
+
+            Invoke-SQLiteBulkCopy -DataTable $dataTable -DataSource $file -Table _ -ConflictClause Ignore -Force
+            _hideFile $file
+        }
+    } else {
+        if (!$pathExists) { $null = New-Item -Path $path -ItemType Directory }
+        if (!$fileExists) { 
+            $null = New-Item -Path $file -ItemType File 
+            Invoke-SqliteQuery -DataSource $file -Query $query
+            _hideFile $file
+        }
     }
 
     return $file
@@ -265,4 +306,20 @@ function _isValidRecoveryWord ([securestring] $recoveryWord) {
     $recKey = [pscredential]::new("Key", $recoveryWord)
 
     return ($recKey.GetNetworkCredential().Password -eq $key.GetNetworkCredential().Password)
+}
+
+function _selectValueFromDB([string] $name, [int] $id) {
+    if ($name -and $id) {
+        return (Invoke-SqliteQuery -DataSource (_getDbPath) -Query "SELECT Value FROM _ WHERE Name = '$name' AND Id = '$id'")
+    }
+
+    if (!$name -and $id) {
+        return (Invoke-SqliteQuery -DataSource (_getDbPath) -Query "SELECT Value FROM _ WHERE Id = '$id'")
+    }
+
+    if ($name -and !$id) {
+        return (Invoke-SqliteQuery -DataSource (_getDbPath) -Query "SELECT Value FROM _ WHERE Name = '$name'")
+    }
+
+    return (Invoke-SqliteQuery -DataSource (_getDbPath) -Query "SELECT * FROM _")
 }
