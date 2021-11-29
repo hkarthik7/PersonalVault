@@ -8,7 +8,7 @@ You can view the usage of module in the [blog post](https://hkarthik7.github.io/
 
 ## Getting Started
 
-Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/1.1.2)
+Install the module from the [PowerShellGallery](https://www.powershellgallery.com/packages/PersonalVault/2.0.0)
 
 ```powershell
 # For PowerShell version 5 and above run.
