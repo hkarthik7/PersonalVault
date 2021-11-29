@@ -8,7 +8,7 @@ param (
 
     [Parameter(Mandatory = $false, Position = 1)]
     [ValidateSet("Major", "Minor", "Patch", "Build")]
-    [string] $Version = "Patch"
+    [string] $Version = "Major"
 )
 
 $root = Split-Path $PSCommandPath
