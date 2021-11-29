@@ -23,8 +23,8 @@ Describe "PersonalVault" {
             }
         }
 
-        It "Should update a secret to personal vault" {            
-            Update-PSSecret -Name "Test" -Value "Test@123" -Force
+        It "Should update a secret to personal vault" {
+            Update-PSSecret -Name "Test" -Value "Test@123" -Id 1 -Force
             Get-PSSecret -Name "Test" -AsPlainText | Should -BeLikeExactly "Test@123"
         }
 
