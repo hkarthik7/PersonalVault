@@ -30,7 +30,10 @@ function Update-PSSecret {
 
                 Invoke-SqliteQuery `
                     -DataSource (_getDbPath) `
-                    -Query "UPDATE _ SET Value = '$encryptedValue', UpdatedOn = '$(Get-Date)' WHERE Name = '$Name' AND Id = '$Id'"
+                    -Query "UPDATE _ SET Value = '$encryptedValue', UpdatedOn = (@D) WHERE Name = '$Name' AND Id = '$Id'" `
+                    -SqlParameters @{
+                        D = Get-Date
+                    }
             
                 # cleaning up
                 _clearHistory $MyInvocation.MyCommand.Name
