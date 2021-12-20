@@ -1,3 +1,7 @@
+# 2.0.1
+
+- Bug fix for **Update-PSSecret** cmdlet.
+
 # 2.0.0
 
 **Breaking Changes**
